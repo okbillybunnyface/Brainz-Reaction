@@ -8,7 +8,7 @@ public class WalkScript : MonoBehaviour
     private float speed;
     public float moveAccel = 1f;
     public float turnSpeed = 15f;
-    private GameObject target;
+    private GameObject target = null;
     private bool seeking = false;
 
     void Start()
@@ -19,6 +19,11 @@ public class WalkScript : MonoBehaviour
     void FixedUpdate()
     {
 
+    }
+
+    public void StopSeeking()
+    {
+        this.target = null;
     }
 
     public void SeekTarget(GameObject target)
@@ -33,15 +38,14 @@ public class WalkScript : MonoBehaviour
 
     private void Walk(float speed)
     {
-        this.speed = speed;
-        if (speed > maxSpeed) speed = maxSpeed;
+        this.speed = (speed > maxSpeed) ? maxSpeed : speed;
     }
 
     IEnumerator Walking()
     {
         while (true)
         {
-            Vector2 force1 = speed * transform.right * moveAccel * (1 - Vector2.Dot(transform.right, rigidbody2D.velocity) / maxSpeed);
+            Vector2 force1 = transform.right * moveAccel * (speed - Vector2.Dot(transform.right, rigidbody2D.velocity) / maxSpeed);
             Vector2 force2 = transform.up * moveAccel * (0 - Vector2.Dot(transform.up, rigidbody2D.velocity) / maxSpeed);
             rigidbody2D.AddForce(force1 + force2);
 
@@ -58,9 +62,11 @@ public class WalkScript : MonoBehaviour
             Vector3 toTarget = target.transform.position - transform.position;
             transform.right = Vector3.Lerp(transform.right, toTarget, Time.deltaTime * turnSpeed);
 
-            Walk(speed);
+            Walk(maxSpeed);
 
             yield return new WaitForFixedUpdate();
+
+            if (this.target == null) seeking = false;
         }
     }
 }
