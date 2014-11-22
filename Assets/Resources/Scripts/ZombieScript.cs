@@ -4,13 +4,11 @@ using System.Collections;
 public class ZombieScript : CharacterScript
 {
     private GameObject target;
-	Animator anim;
 
 	// Use this for initialization
 	void Start () 
     {
         walkScript = this.GetComponent<WalkScript>();
-		anim = GetComponent<Animator>();
         target = this.gameObject;
         StartCoroutine(FindVictim(4f));
 	}
@@ -20,7 +18,7 @@ public class ZombieScript : CharacterScript
         if (!target.activeSelf)
         {
             walkScript.StopSeeking();
-            StartCoroutine(FindVictim(2f));
+            StartCoroutine(FindVictim(1f));
         }
     }
 
@@ -52,7 +50,7 @@ public class ZombieScript : CharacterScript
 
     protected override void Die()
     {
-		anim.SetTrigger("death");
+        this.gameObject.SetActive(false);
     }
 
     private IEnumerator FindVictim(float time)
