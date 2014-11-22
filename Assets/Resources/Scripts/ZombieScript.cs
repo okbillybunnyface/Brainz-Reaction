@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(WalkScript))]
 public class ZombieScript : CharacterScript
 {
-    private WalkScript walkScript;
     private GameObject target;
 
 	// Use this for initialization
