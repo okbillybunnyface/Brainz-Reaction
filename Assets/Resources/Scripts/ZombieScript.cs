@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof (WalkScript))]
-public class ZombieScript : MonoBehaviour 
+[RequireComponent(typeof(WalkScript))]
+public class ZombieScript : CharacterScript
 {
     private WalkScript walkScript;
     private GameObject target;
@@ -11,38 +11,53 @@ public class ZombieScript : MonoBehaviour
 	void Start () 
     {
         walkScript = this.GetComponent<WalkScript>();
-        target = GameObject.FindGameObjectWithTag("Human");
-        walkScript.SeekTarget(target);
+        target = this.gameObject;
+        StartCoroutine(FindVictim(4f));
 	}
 
     void Update()
     {
-        if (!target.activeSelf) StartCoroutine(FindVictim());
+        if (!target.activeSelf)
+        {
+            walkScript.StopSeeking();
+            StartCoroutine(FindVictim(2f));
+        }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.collider.tag == "Human")
         {
+            /*
             walkScript.StopSeeking();
 
             Infect(collision.gameObject);
 
             StartCoroutine(FindVictim());
+             */
+
+            Attack(collision.gameObject);
         }
     }
 
-    void Infect(GameObject victim)
+    protected override void Attack(GameObject victim)
     {
-        victim.SetActive(false);
-        GameObject zombie = (GameObject)GameObject.Instantiate(this.gameObject);
-        zombie.transform.position = victim.transform.position;
+        if (canAttack)
+        {
+            victim.SendMessage("Damage", attackDamage, SendMessageOptions.DontRequireReceiver);
+            victim.SendMessage("Infect", SendMessageOptions.DontRequireReceiver);
+            base.Attack(victim);
+        }
     }
 
-    IEnumerator FindVictim()
+    protected override void Die()
     {
-        yield return new WaitForSeconds(2f);
+        
+    }
 
+    private IEnumerator FindVictim(float time)
+    {
+        yield return new WaitForSeconds(time);
 
         GameObject[] potentials = GameObject.FindGameObjectsWithTag("Human");
         GameObject currentVictim = potentials[0];
