@@ -18,7 +18,7 @@ public class ZombieScript : CharacterScript
         if (!target.activeSelf)
         {
             walkScript.StopSeeking();
-            StartCoroutine(FindVictim(2f));
+            StartCoroutine(FindVictim(1f));
         }
     }
 
@@ -50,7 +50,7 @@ public class ZombieScript : CharacterScript
 
     protected override void Die()
     {
-        
+        this.gameObject.SetActive(false);
     }
 
     private IEnumerator FindVictim(float time)

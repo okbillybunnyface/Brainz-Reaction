@@ -8,6 +8,7 @@ public abstract class HumanScript : CharacterScript
     private bool infected = false;
     protected Collider2D[] zombiesInSight;
     private LayerMask zombieLayer = 1 << 9;
+    private bool reacting = false;
 
     void OnEnable()
     {
@@ -17,8 +18,10 @@ public abstract class HumanScript : CharacterScript
 
     void Update()
     {
-        if (zombiesInSight.Length > zombieCountThreshold)
+        if (zombiesInSight.Length > zombieCountThreshold || reacting)
         {
+            if (!reacting) StartCoroutine(ReactionResetTimer(5f));
+            reacting = true;
             ReactToZombies();
         }
     }
@@ -38,6 +41,13 @@ public abstract class HumanScript : CharacterScript
             zombie.transform.position = transform.position;
             this.gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator ReactionResetTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        reacting = false;
     }
 
     IEnumerator DetectZombies()
