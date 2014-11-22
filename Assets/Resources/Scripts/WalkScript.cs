@@ -35,15 +35,20 @@ public class WalkScript : MonoBehaviour
         }
     }
 
-    private void Walk(float speed)
+    public void Walk(float speed)
     {
         this.speed = (speed > maxSpeed) ? maxSpeed : speed;
     }
 
-    public void TurnToTarget(GameObject target)
+    public void TurnTo(Vector3 direction)
+    {
+        transform.right = Vector3.Lerp(transform.right, direction, Time.deltaTime * turnSpeed);
+    }
+
+    public void TurnTo(GameObject target)
     {
         Vector3 toTarget = target.transform.position - transform.position;
-        transform.right = Vector3.Lerp(transform.right, toTarget, Time.deltaTime * turnSpeed);
+        TurnTo(toTarget);
     }
 
     IEnumerator Walking()
@@ -64,7 +69,7 @@ public class WalkScript : MonoBehaviour
     {
         while (seeking)
         {
-            TurnToTarget(target);
+            TurnTo(target);
 
             Walk(maxSpeed);
 

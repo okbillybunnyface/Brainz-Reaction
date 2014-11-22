@@ -3,11 +3,9 @@ using System.Collections;
 
 public class GunmanScript : HumanScript 
 {
-
+    public bool shotgun = false;
     protected override void ReactToZombies()
     {
-        if (zombiesInSight.Length <= 0) return;
-
         GameObject closestZombie = zombiesInSight[0].gameObject;
         float distance = (closestZombie.transform.position - transform.position).sqrMagnitude;
         foreach (Collider2D zombie in zombiesInSight)
@@ -20,16 +18,15 @@ public class GunmanScript : HumanScript
             }
         }
 
-        walkScript.TurnToTarget(closestZombie);
+        walkScript.TurnTo(closestZombie);
 
         if(canAttack) Attack(closestZombie);
     }
 
     protected override void Attack(GameObject victim)
     {
-
-        float distance = (victim.transform.position - transform.position).sqrMagnitude;
-        victim.SendMessage("Damage", attackDamage / (1 + distance), SendMessageOptions.DontRequireReceiver);
+        float damage = shotgun ? attackDamage / (1 + (victim.transform.position - transform.position).sqrMagnitude) : attackDamage;
+        victim.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
 
         base.Attack(victim);
     }

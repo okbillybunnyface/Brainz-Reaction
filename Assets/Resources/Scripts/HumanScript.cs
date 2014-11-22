@@ -22,7 +22,7 @@ public abstract class HumanScript : CharacterScript
         {
             if (!reacting) StartCoroutine(ReactionResetTimer(5f));
             reacting = true;
-            ReactToZombies();
+            if (zombiesInSight.Length > 0) ReactToZombies();
         }
     }
 
