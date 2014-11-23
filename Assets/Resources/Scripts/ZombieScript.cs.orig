@@ -4,21 +4,19 @@ using System.Collections;
 public class ZombieScript : CharacterScript
 {
     private GameObject target;
-	public GameObject selectionCircle;
 	Animator anim;
 
 	// Use this for initialization
 	void Start () 
     {
-		anim = GetComponent<Animator>();
         walkScript = this.GetComponent<WalkScript>();
+		anim = GetComponent<Animator>();
         target = this.gameObject;
         StartCoroutine(FindVictim(4f));
 	}
 
     void Update()
     {
-		if (hitPoints <= 0) Die();
         if (!target.activeSelf)
         {
             walkScript.StopSeeking();
@@ -54,11 +52,11 @@ public class ZombieScript : CharacterScript
 
     protected override void Die()
     {
-        //this.gameObject.SetActive(false);
-
+<<<<<<< HEAD
 		anim.SetTrigger("death");
-		Debug.Log("zombie death");
-		this.gameObject.collider2D.enabled = false;
+=======
+        this.gameObject.SetActive(false);
+>>>>>>> 871982e6a83634e6afeef02739091f26586aea3e
     }
 
     private IEnumerator FindVictim(float time)
@@ -81,26 +79,4 @@ public class ZombieScript : CharacterScript
         target = currentVictim;
         walkScript.SeekTarget(target);
     }
-
-	void OnMouseOver()
-	{
-		Debug.Log("mouseover");
-		if (Input.GetMouseButtonDown(0))
-		{
-			EnvironmentScript.showSelectedTargets(this.gameObject, target);
-		}
-	}
-
-	public void setCircleActive(bool circleOn)
-	{
-		this.selectionCircle.SetActive(circleOn);
-	}
-
-	public void setTarget(GameObject humanTarget)
-	{
-		this.target = humanTarget;
-	}
-
-
-
 }

@@ -9,11 +9,13 @@ public abstract class HumanScript : CharacterScript
     protected Collider2D[] zombiesInSight;
     private LayerMask zombieLayer = 1 << 9;
     private bool reacting = false;
+	private GameObject selectionCircle;
 
     void OnEnable()
     {
         infected = false;
         StartCoroutine(DetectZombies());
+		selectionCircle = this.transform.GetChild(0).gameObject;
     }
 
     void Update()
@@ -42,6 +44,26 @@ public abstract class HumanScript : CharacterScript
             this.gameObject.SetActive(false);
         }
     }
+
+	public void setCircleActive(bool circleOn)
+	{
+		this.selectionCircle.SetActive(circleOn);
+	}
+
+	void OnMouseOver()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+//			if(zombieSelectedFirst) 
+//			{
+//				EnvironmentScript.setZombieTarget(this.gameObject);
+//				zombieSelectedFirst = false;
+//			}
+//			else Debug.Log("Must select zombie first!!");
+			//check with env script to see if zombie selected first
+			EnvironmentScript.setHumanMarked(this.gameObject);
+		}
+	}
 
     IEnumerator ReactionResetTimer(float time)
     {
