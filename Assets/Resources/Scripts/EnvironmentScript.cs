@@ -18,9 +18,10 @@ public class EnvironmentScript : MonoBehaviour {
 	void Start () {
 		currentTarget = null;
 		currentZombie = null;
-		howManyHumansLeft = (GameObject.FindGameObjectsWithTag("Human").Length) - 1;
 		gameStarted = false;
 		youWin = false;
+		firstZombieSpawned = false;
+		zombieSelectedFirst = false;
 		audio.Stop();
 		audio.PlayOneShot(pauseMusic);
 		StartCoroutine(waitForGameStart());
@@ -32,7 +33,7 @@ public class EnvironmentScript : MonoBehaviour {
 
 	public static void OneLessHuman()
 	{
-		howManyHumansLeft -= 1; 
+		howManyHumansLeft = (GameObject.FindGameObjectsWithTag("Human").Length) - 2;
 		Debug.Log("Humans left = " + howManyHumansLeft);
 		if (howManyHumansLeft < 1) 
 		{
