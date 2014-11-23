@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BoundsScript : MonoBehaviour {
 
-    private Camera mainCamera;
+    public static Camera mainCamera;
 
     void Awake()
     {

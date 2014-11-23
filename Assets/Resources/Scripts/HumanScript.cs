@@ -43,10 +43,15 @@ public abstract class HumanScript : CharacterScript
 
         if (infected)
         {
-            GameObject zombie = (GameObject)GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Zombie"));
-            zombie.transform.position = transform.position;
-            this.gameObject.SetActive(false);
+            Zombify();
         }
+    }
+
+    public void Zombify()
+    {
+        GameObject zombie = (GameObject)GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Zombie"));
+        zombie.transform.position = transform.position;
+        this.gameObject.SetActive(false);
     }
 
 	public void setCircleActive(bool circleOn)
