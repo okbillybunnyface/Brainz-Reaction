@@ -46,6 +46,7 @@ public abstract class HumanScript : CharacterScript
     {
         base.Die();
 		anim.SetTrigger("death");
+		EnvironmentScript.OneLessHuman();
         StartCoroutine(Zombify());
     }
 
