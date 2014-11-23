@@ -5,24 +5,41 @@ using System.Collections;
 public class EnvironmentScript : MonoBehaviour {
 
 	public bool paused = false;
-	public static bool gameStarted = false;
+	public static bool gameStarted = false, youWin = false;
 	public float pauseTime = 5f, playTime = 10f;
 	public static GameObject currentZombie, currentTarget;
 	private static bool zombieSelectedFirst = false, firstZombieSpawned = false;
     public static System.Random random = new System.Random();
 	public GameObject camera;
 	public AudioClip actionMusic, pauseMusic;
+	public static int howManyHumansLeft;
 
 	// Use this for initialization
 	void Start () {
 		currentTarget = null;
 		currentZombie = null;
+		howManyHumansLeft = (GameObject.FindGameObjectsWithTag("Human").Length) - 1;
+		gameStarted = false;
+		youWin = false;
+		audio.Stop();
 		audio.PlayOneShot(pauseMusic);
 		StartCoroutine(waitForGameStart());
 	}
 	
 	// Update is called once per frame
 	void Update () {
+	}
+
+	public static void OneLessHuman()
+	{
+		howManyHumansLeft -= 1; 
+		Debug.Log("Humans left = " + howManyHumansLeft);
+		if (howManyHumansLeft < 1) 
+		{
+			//win conditions method
+			Debug.Log("Win conditions!");
+			youWin = true;
+		}
 	}
 
 
@@ -46,7 +63,7 @@ public class EnvironmentScript : MonoBehaviour {
 	{
 		if(!firstZombieSpawned)
 		{
-			if(human != null) human.SendMessage("Zombify", SendMessageOptions.DontRequireReceiver);
+			if(human != null) human.SendMessage("Die", SendMessageOptions.DontRequireReceiver);
 			firstZombieSpawned = true;
 			gameStarted = true;
 		}
@@ -99,9 +116,20 @@ public class EnvironmentScript : MonoBehaviour {
 			yield return new WaitForSeconds(pauseTime * Time.timeScale);
 		}
 
-
-
-
 	}
 
+	void OnGUI()
+	{
+		if(youWin)
+		{
+			Time.timeScale = .00001f;
+			if (GUI.Button(new Rect((Screen.width /2)-100, Screen.height/2, 100, 30), "You Win!"))
+			{
+				Debug.Log("Clicked the button with text");
+				Application.LoadLevel(Application.loadedLevel);
+			}
+
+		}
+	}
+	
 }
