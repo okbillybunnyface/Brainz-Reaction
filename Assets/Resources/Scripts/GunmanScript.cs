@@ -18,25 +18,35 @@ public class GunmanScript : HumanScript
         {
             walkScript.TurnTo(closestZombie);
 
-            if (canAttack) Attack(closestZombie);
+            if (canAttack) Attack(closestZombie, attackDamage);
         }
     }
 
-    protected override void Attack(GameObject victim)
+    protected override void NewVictim()
+    {
+        closestZombie = null;
+    }
+
+    protected override bool Attack(GameObject victim, float attackDamage)
     {
         float damage = shotgun ? attackDamage / (1 + (victim.transform.position - transform.position).sqrMagnitude) : attackDamage;
-        victim.SendMessage("Damage", damage, SendMessageOptions.DontRequireReceiver);
-		if(shotgun)
-		{
-			anim.SetTrigger("shotgunAttack");
-			audio.PlayOneShot(shotgunFire);
-		}
-		else 
-		{
-			anim.SetTrigger("pistolAttack");
-			audio.PlayOneShot(pistolFire);
-		}
 
-        base.Attack(victim);
+        if (base.Attack(victim, damage))
+        {
+            if (shotgun)
+            {
+                anim.SetTrigger("shotgunAttack");
+                audio.PlayOneShot(shotgunFire);
+            }
+            else
+            {
+                anim.SetTrigger("pistolAttack");
+                audio.PlayOneShot(pistolFire);
+            }
+            return true;
+        }
+        else return false;
     }
+
+    
 }

@@ -13,16 +13,19 @@ public class ZombieScript : CharacterScript
 		anim = GetComponent<Animator>();
         walkScript = this.GetComponent<WalkScript>();
         target = this.gameObject;
-        StartCoroutine(FindVictim(4f));
+        StartCoroutine(FindVictim(1f));
 	}
 
     void Update()
     {
 		if (hitPoints <= 0) Die();
-        if (!target.activeSelf && !ded)
+        if (target != null)
         {
-            walkScript.StopSeeking();
-            StartCoroutine(FindVictim(1f));
+            if (!target.activeSelf && !ded)
+            {
+                walkScript.StopSeeking();
+                StartCoroutine(FindVictim(1f));
+            }
         }
     }
 
@@ -38,18 +41,25 @@ public class ZombieScript : CharacterScript
             StartCoroutine(FindVictim());
              */
 
-            Attack(collision.gameObject);
+            Attack(collision.gameObject, attackDamage);
         }
     }
 
-    protected override void Attack(GameObject victim)
+    protected override bool Attack(GameObject victim, float attackDamage)
     {
-        if (canAttack)
+        if (base.Attack(victim, attackDamage))
         {
-            victim.SendMessage("Damage", attackDamage, SendMessageOptions.DontRequireReceiver);
+            transform.right = victim.transform.position - transform.position;
+            rigidbody2D.AddForce((victim.transform.position - transform.position) * 5f, ForceMode2D.Impulse);
             victim.SendMessage("Infect", SendMessageOptions.DontRequireReceiver);
-            base.Attack(victim);
+            return true;
         }
+        else return false;
+    }
+
+    protected override void NewVictim()
+    {
+        StartCoroutine(FindVictim(1f));
     }
 
     protected override void Die()
@@ -57,13 +67,19 @@ public class ZombieScript : CharacterScript
         //this.gameObject.SetActive(false);
 
         base.Die();
-        walkScript.StopSeeking();
-        rigidbody2D.isKinematic = true;
-        this.gameObject.layer = 0;
-        this.renderer.sortingOrder = this.renderer.sortingOrder - 1;
+        
 		anim.SetTrigger("death");
+    }
 
-		this.gameObject.collider2D.enabled = false;
+    protected override void LevelUp()
+    {
+        if (level < 4)
+        {
+            attackDamage += 25f;
+            hitPoints += 25f;
+            level++;
+            transform.localScale = new Vector3(transform.localScale.x + 0.1f, transform.localScale.y + 0.1f, transform.localScale.z);
+        }
     }
 
     private IEnumerator FindVictim(float time)

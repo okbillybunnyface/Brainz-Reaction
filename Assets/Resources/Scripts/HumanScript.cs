@@ -37,21 +37,32 @@ public abstract class HumanScript : CharacterScript
         infected = true;
     }
 
+    protected override void NewVictim()
+    {
+
+    }
+
     protected override void Die()
     {
         base.Die();
 
-        if (infected)
-        {
-            Zombify();
-        }
+        StartCoroutine(Zombify());
     }
 
-    public void Zombify()
+    protected override void LevelUp()
     {
+        attackDamage += 10f;
+        hitPoints += 10f;
+        level++;
+        transform.localScale = new Vector3(transform.localScale.x + 0.1f, transform.localScale.y + 0.1f, transform.localScale.z);
+    }
+
+    IEnumerator Zombify()
+    {
+        yield return new WaitForSeconds(1f);
         GameObject zombie = (GameObject)GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Zombie"));
         zombie.transform.position = transform.position;
-        this.gameObject.SetActive(false);
+        GameObject.Destroy(this.gameObject);
     }
 
 	public void setCircleActive(bool circleOn)

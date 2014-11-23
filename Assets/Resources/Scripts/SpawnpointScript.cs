@@ -14,8 +14,8 @@ public class SpawnpointScript : MonoBehaviour {
     {
         Camera mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         Vector2[] spawnpoints = PoissonDisc.Bridsons(transform.position, minDistance, numSpawns, 10,
-            mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect, mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect,
-            mainCamera.transform.position.y + mainCamera.orthographicSize, mainCamera.transform.position.y - mainCamera.orthographicSize);
+            mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect - 1f, mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect + 1f,
+            mainCamera.transform.position.y + mainCamera.orthographicSize - 1f, mainCamera.transform.position.y - mainCamera.orthographicSize + 1f);
         System.Random rng = new System.Random();
         foreach (Vector2 point in spawnpoints)
         {
