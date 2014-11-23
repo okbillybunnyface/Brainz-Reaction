@@ -45,6 +45,7 @@ public abstract class HumanScript : CharacterScript
     protected override void Die()
     {
         base.Die();
+		anim.SetTrigger("death");
         StartCoroutine(Zombify());
     }
 
