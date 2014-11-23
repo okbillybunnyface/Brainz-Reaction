@@ -54,13 +54,6 @@ public abstract class HumanScript : CharacterScript
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-//			if(zombieSelectedFirst) 
-//			{
-//				EnvironmentScript.setZombieTarget(this.gameObject);
-//				zombieSelectedFirst = false;
-//			}
-//			else Debug.Log("Must select zombie first!!");
-			//check with env script to see if zombie selected first
 			EnvironmentScript.setHumanMarked(this.gameObject);
 		}
 	}
