@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(WalkScript))]
-public abstract class CharacterScript : MonoBehaviour 
+public class CharacterScript : MonoBehaviour 
 {
     public float hitPoints = 100f;
     public float attackDamage = 10f;
     public float attackDelay = 1f;
+
+    protected bool ded = false;
 
     protected WalkScript walkScript;
 
@@ -15,6 +18,12 @@ public abstract class CharacterScript : MonoBehaviour
     void Awake()
     {
         walkScript = this.gameObject.GetComponent<WalkScript>();
+    }
+
+    protected virtual void OnEnable()
+    {
+        ded = false;
+        canAttack = true;
     }
 
     public void Damage(float amount)
@@ -30,11 +39,15 @@ public abstract class CharacterScript : MonoBehaviour
         StartCoroutine(RefreshAttack(attackDelay));
     }
 
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+        ded = true;
+        canAttack = false;
+    }
 
     private IEnumerator RefreshAttack(float time)
     {
-        yield return new WaitForSeconds(time);
-        canAttack = true;
+        yield return new WaitForSeconds(time + (float)(EnvironmentScript.random.NextDouble() * 0.1f * time - 0.05f * time));
+        if(!ded)canAttack = true;
     }
 }

@@ -19,7 +19,7 @@ public class ZombieScript : CharacterScript
     void Update()
     {
 		if (hitPoints <= 0) Die();
-        if (!target.activeSelf)
+        if (!target.activeSelf && !ded)
         {
             walkScript.StopSeeking();
             StartCoroutine(FindVictim(1f));
@@ -56,8 +56,13 @@ public class ZombieScript : CharacterScript
     {
         //this.gameObject.SetActive(false);
 
+        base.Die();
+        walkScript.StopSeeking();
+        rigidbody2D.isKinematic = true;
+        this.gameObject.layer = 0;
+        this.renderer.sortingOrder = this.renderer.sortingOrder - 1;
 		anim.SetTrigger("death");
-		Debug.Log("zombie death");
+
 		this.gameObject.collider2D.enabled = false;
     }
 
@@ -99,6 +104,7 @@ public class ZombieScript : CharacterScript
 	public void setTarget(GameObject humanTarget)
 	{
 		this.target = humanTarget;
+        walkScript.SeekTarget(humanTarget);
 	}
 
 

@@ -3,12 +3,12 @@ using System.Collections;
 
 public class RunnerScript : HumanScript
 {
+    public bool fistFight = false;
     protected override void ReactToZombies()
     {
-        GameObject closestZombie = zombiesInSight[0].gameObject;
-
-        Vector3 direction = transform.position - closestZombie.transform.position;
-        walkScript.TurnTo(direction);
-        walkScript.Walk(walkScript.maxSpeed);
+        Vector3 toZombie = transform.position - closestZombie.transform.position;
+        Vector3 toHuman = closestHuman.transform.position - transform.position;
+        walkScript.TurnTo(toZombie);
+        walkScript.Walk(Vector3.Dot(toZombie, toHuman));
     }
 }

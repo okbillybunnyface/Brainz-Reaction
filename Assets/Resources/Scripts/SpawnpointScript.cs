@@ -8,7 +8,7 @@ public class SpawnpointScript : MonoBehaviour {
     public float minDistance = 10f;
     public int numSpawns = 100;
 
-    void Awake()
+    void Start()
     {
         Vector2[] spawnpoints = PoissonDisc.Bridsons(transform.position, minDistance, numSpawns, 10);
         System.Random rng = new System.Random();
