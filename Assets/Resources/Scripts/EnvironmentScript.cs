@@ -5,6 +5,7 @@ using System.Collections;
 public class EnvironmentScript : MonoBehaviour {
 
 	public bool paused = false;
+	public static bool gameStarted = false;
 	public float pauseTime = 5f, playTime = 10f;
 	public static GameObject currentZombie, currentTarget;
 	private static bool zombieSelectedFirst = false, firstZombieSpawned = false;
@@ -16,12 +17,14 @@ public class EnvironmentScript : MonoBehaviour {
 	void Start () {
 		currentTarget = null;
 		currentZombie = null;
-		StartCoroutine(pauseInterval());
+		audio.PlayOneShot(pauseMusic);
+		StartCoroutine(waitForGameStart());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	}
+
 
 	//Highlights the zombie and his current target
 	public static void showSelectedTargets(GameObject zombie, GameObject target)
@@ -35,7 +38,7 @@ public class EnvironmentScript : MonoBehaviour {
 			zombieSelectedFirst = true; //verifying a human can't be selected w/o a zombie being first
 
 			currentZombie.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
-				if(currentTarget != null)currentTarget.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
+			if(currentTarget != null)currentTarget.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
 	}
 
 	//Highlights the selected human
@@ -45,6 +48,7 @@ public class EnvironmentScript : MonoBehaviour {
 		{
 			if(human != null) human.SendMessage("Zombify", SendMessageOptions.DontRequireReceiver);
 			firstZombieSpawned = true;
+			gameStarted = true;
 		}
 		else
 		{
@@ -65,17 +69,21 @@ public class EnvironmentScript : MonoBehaviour {
 		currentZombie.SendMessage("setTarget", currentTarget, SendMessageOptions.DontRequireReceiver);
 	}
 
-	IEnumerator pauseInterval()
+
+	IEnumerator waitForGameStart()
+	{
+		Time.timeScale = .000001f;
+		while(!gameStarted)
+		{
+			yield return null;
+		}
+		Time.timeScale = 1f;
+		StartCoroutine(pauseInterval());
+	}
+	 IEnumerator pauseInterval()
 	{
 		while(true)
 		{
-			//paused
-			Time.timeScale = .00001f;
-			paused = !paused;
-			audio.Stop();
-			audio.PlayOneShot(pauseMusic);
-			yield return new WaitForSeconds(pauseTime * Time.timeScale);
-
 			//running
 			Time.timeScale = 1;
 			paused = !paused;
@@ -83,6 +91,12 @@ public class EnvironmentScript : MonoBehaviour {
 			audio.PlayOneShot(actionMusic);
 			yield return new WaitForSeconds(playTime * Time.timeScale);
 
+			//paused
+			Time.timeScale = .00001f;
+			paused = !paused;
+			audio.Stop();
+			audio.PlayOneShot(pauseMusic);
+			yield return new WaitForSeconds(pauseTime * Time.timeScale);
 		}
 
 
