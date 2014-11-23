@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AbominationScript : MonoBehaviour {
+public class AbominationScript : ZombieScript {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public float explosionRadius = 0.5f;
+    private LayerMask zombieLayer = 1 << 10, humanLayer = 1 << 8;
+
+    public void Initialize(float hitpoints, float attackDamage, float level)
+    {
+        this.hitPoints = hitPoints;
+        this.attackDamage = attackDamage;
+        this.level = level;
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        Physics2D.OverlapCircleAll(transform.position, explosionRadius, humanLayer);
+    }
 }
