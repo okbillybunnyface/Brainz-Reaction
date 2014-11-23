@@ -5,12 +5,10 @@ public class ZombieScript : CharacterScript
 {
     private GameObject target;
 	public GameObject selectionCircle;
-	Animator anim;
 
 	// Use this for initialization
 	void Start () 
     {
-		anim = GetComponent<Animator>();
         walkScript = this.GetComponent<WalkScript>();
         target = this.gameObject;
         StartCoroutine(FindVictim(1f));
@@ -19,13 +17,11 @@ public class ZombieScript : CharacterScript
     void Update()
     {
 		if (hitPoints <= 0) Die();
-        if (target != null)
+        
+        if (target == null && !ded)
         {
-            if (!target.activeSelf && !ded)
-            {
-                walkScript.StopSeeking();
-                StartCoroutine(FindVictim(1f));
-            }
+            walkScript.StopSeeking();
+            StartCoroutine(FindVictim(1f));
         }
     }
 
@@ -50,7 +46,7 @@ public class ZombieScript : CharacterScript
         if (base.Attack(victim, attackDamage))
         {
             transform.right = victim.transform.position - transform.position;
-            rigidbody2D.AddForce((victim.transform.position - transform.position) * 5f, ForceMode2D.Impulse);
+            rigidbody2D.AddForce((victim.transform.position - transform.position) * 2f, ForceMode2D.Impulse);
             victim.SendMessage("Infect", SendMessageOptions.DontRequireReceiver);
             return true;
         }
@@ -73,11 +69,12 @@ public class ZombieScript : CharacterScript
 
     protected override void LevelUp()
     {
-        if (level < 4)
+        level++;
+        if (level < 10)
         {
             attackDamage += 25f;
             hitPoints += 25f;
-            level++;
+            if (level == 4) Evolve(this.hitPoints, this.attackDamage, this.level);
             transform.localScale = new Vector3(transform.localScale.x + 0.1f, transform.localScale.y + 0.1f, transform.localScale.z);
         }
     }
@@ -101,6 +98,15 @@ public class ZombieScript : CharacterScript
 
         target = currentVictim;
         walkScript.SeekTarget(target);
+    }
+
+    private void Evolve(float hitpoints, float attackDamage, float level)
+    {
+        GameObject zombie = (GameObject)GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Abomination"));
+        zombie.transform.position = transform.position;
+        AbominationScript abomscript = zombie.GetComponent<AbominationScript>();
+        abomscript.Initialize(hitpoints, attackDamage, level);
+        GameObject.Destroy(this.gameObject);
     }
 
 	void OnMouseOver()

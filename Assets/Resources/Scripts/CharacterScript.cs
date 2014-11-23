@@ -17,6 +17,13 @@ public abstract class CharacterScript : MonoBehaviour
 
     protected bool canAttack = true;
 
+    protected Animator anim;
+
+    void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
+
     void Awake()
     {
         walkScript = this.gameObject.GetComponent<WalkScript>();

@@ -5,12 +5,6 @@ public class GunmanScript : HumanScript
 {
     public bool shotgun = false;
 	public AudioClip shotgunFire, pistolFire;
-	Animator anim;
-
-	void Start()
-	{
-		anim = GetComponent<Animator>();
-	}
 
     protected override void ReactToZombies()
     {
