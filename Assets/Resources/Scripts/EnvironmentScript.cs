@@ -67,14 +67,6 @@ public class EnvironmentScript : MonoBehaviour {
 
 	IEnumerator pauseInterval()
 	{
-//		yield return new WaitForSeconds(pauseTime);
-//		if (paused)
-//		{
-//			Time.timeScale = 0.0000001f;
-//		}else
-//			Time.timeScale = 1f;
-//		paused = !paused;
-
 		while(true)
 		{
 			//paused
