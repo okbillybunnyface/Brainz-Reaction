@@ -12,8 +12,7 @@ public class AbominationScript : ZombieScript {
         this.hitPoints = hitPoints;
         this.attackDamage = attackDamage;
         this.level = level;
-        humanLayer = 1 << 8;
-        humanLayer = humanLayer + 1 << 9;
+        humanLayer = 1 << 8 | 1 << 9;
     }
 
     protected override void Die()
