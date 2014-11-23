@@ -47,8 +47,11 @@ public class WalkScript : MonoBehaviour
 
     public void TurnTo(GameObject target)
     {
-        Vector3 toTarget = target.transform.position - transform.position;
-        TurnTo(toTarget);
+        if (target != null)
+        {
+            Vector3 toTarget = target.transform.position - transform.position;
+            TurnTo(toTarget);
+        }
     }
 
     IEnumerator Walking()

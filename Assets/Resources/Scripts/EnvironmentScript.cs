@@ -35,7 +35,7 @@ public class EnvironmentScript : MonoBehaviour {
 			zombieSelectedFirst = true; //verifying a human can't be selected w/o a zombie being first
 
 			currentZombie.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
-				target.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
+				if(currentTarget != null)currentTarget.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver);
 	}
 
 	//Highlights the selected human
@@ -50,7 +50,7 @@ public class EnvironmentScript : MonoBehaviour {
 		{
 			if (zombieSelectedFirst)
 			{
-				currentTarget.SendMessage("setCircleActive", false, SendMessageOptions.DontRequireReceiver); //turn off old human
+				if(currentTarget != null)currentTarget.SendMessage("setCircleActive", false, SendMessageOptions.DontRequireReceiver); //turn off old human
 				human.SendMessage("setCircleActive", true, SendMessageOptions.DontRequireReceiver); //turn on new human
 				setZombieTarget(human);
 			}
