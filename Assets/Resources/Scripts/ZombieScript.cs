@@ -99,6 +99,7 @@ public class ZombieScript : CharacterScript
 	public void setTarget(GameObject humanTarget)
 	{
 		this.target = humanTarget;
+        walkScript.SeekTarget(humanTarget);
 	}
 
 

@@ -6,18 +6,6 @@ public class GunmanScript : HumanScript
     public bool shotgun = false;
     protected override void ReactToZombies()
     {
-        GameObject closestZombie = zombiesInSight[0].gameObject;
-        float distance = (closestZombie.transform.position - transform.position).sqrMagnitude;
-        foreach (Collider2D zombie in zombiesInSight)
-        {
-            float temp = (zombie.transform.position - transform.position).sqrMagnitude;
-            if (temp < distance)
-            {
-                distance = temp;
-                closestZombie = zombie.gameObject;
-            }
-        }
-
         walkScript.TurnTo(closestZombie);
 
         if(canAttack) Attack(closestZombie);
