@@ -89,10 +89,10 @@ public class ZombieScript : CharacterScript
 
 	void OnMouseOver()
 	{
-		Debug.Log("mouseover");
 		if (Input.GetMouseButtonDown(0))
 		{
 			EnvironmentScript.showSelectedTargets(this.gameObject, target);
+            walkScript.SeekTarget(target);
 		}
 	}
 

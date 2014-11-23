@@ -6,7 +6,7 @@ using UnityEngine;
 static class PoissonDisc
 {
     //There must be at least one numPoints, and nothing may be negative
-    public static Vector2[] Bridsons(Vector2 origin, float minDistance, int numPoints, int maxTries)
+    public static Vector2[] Bridsons(Vector2 origin, float minDistance, int numPoints, int maxTries, float xMax, float xMin, float yMax, float yMin)
     {
         Queue<Vector2> activePoints = new Queue<Vector2>();
         Stack<Vector2> outputPoints = new Stack<Vector2>();
@@ -30,6 +30,16 @@ static class PoissonDisc
                     Vector2[] temp = outputPoints.ToArray();
                     foreach (Vector2 point in outputPoints)
                     {
+                        if (candidate.x > xMax || candidate.x < xMin)
+                        {
+                            success = false;
+                            break;
+                        }
+                        if (candidate.y > yMax || candidate.y < yMin)
+                        {
+                            success = false;
+                            break;
+                        }
                         if ((candidate - point).sqrMagnitude < minDistance * minDistance)
                         {
                             success = false;
@@ -44,7 +54,7 @@ static class PoissonDisc
                     }
                 }
                 while (tries < maxTries);
-            } 
+            }
             while (success);
         }
 

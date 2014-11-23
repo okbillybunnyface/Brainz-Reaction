@@ -47,7 +47,7 @@ public class CharacterScript : MonoBehaviour
 
     private IEnumerator RefreshAttack(float time)
     {
-        yield return new WaitForSeconds(time + (float)(EnvironmentScript.random.NextDouble() * 0.1f * time - 0.05f * time));
+        yield return new WaitForSeconds(time + (float)(EnvironmentScript.random.NextDouble() * 0.4f * time - 0.2f * time));
         if(!ded)canAttack = true;
     }
 }
