@@ -5,27 +5,22 @@ using System.Collections;
 public class EnvironmentScript : MonoBehaviour {
 
 	public bool paused = false;
-	public float pauseTime = 5f;
+	public float pauseTime = 5f, playTime = 10f;
 	public static GameObject currentZombie, currentTarget;
 	private static bool zombieSelectedFirst = false, firstZombieSpawned = false;
     public static System.Random random = new System.Random();
-
+	public GameObject camera;
+	public AudioClip actionMusic, pauseMusic;
 
 	// Use this for initialization
 	void Start () {
 		currentTarget = null;
 		currentZombie = null;
+		StartCoroutine(pauseInterval());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-		if (paused)
-		{
-			Time.timeScale = 0.0000001f;
-		}else
-			Time.timeScale = 1f;
-	
 	}
 
 	//Highlights the zombie and his current target
@@ -70,10 +65,37 @@ public class EnvironmentScript : MonoBehaviour {
 		currentZombie.SendMessage("setTarget", currentTarget, SendMessageOptions.DontRequireReceiver);
 	}
 
-//	IEnumerator pauseInterval()
-//	{
-////		yield return new WaitForSeconds(pauseTime);
-////		paused = !paused;
-//	}
+	IEnumerator pauseInterval()
+	{
+//		yield return new WaitForSeconds(pauseTime);
+//		if (paused)
+//		{
+//			Time.timeScale = 0.0000001f;
+//		}else
+//			Time.timeScale = 1f;
+//		paused = !paused;
+
+		while(true)
+		{
+			//paused
+			Time.timeScale = .00001f;
+			paused = !paused;
+			audio.Stop();
+			audio.PlayOneShot(pauseMusic);
+			yield return new WaitForSeconds(pauseTime * Time.timeScale);
+
+			//running
+			Time.timeScale = 1;
+			paused = !paused;
+			audio.Stop();
+			audio.PlayOneShot(actionMusic);
+			yield return new WaitForSeconds(playTime * Time.timeScale);
+
+		}
+
+
+
+
+	}
 
 }
