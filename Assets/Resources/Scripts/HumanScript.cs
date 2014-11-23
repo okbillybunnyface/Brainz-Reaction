@@ -18,7 +18,7 @@ public abstract class HumanScript : CharacterScript
 
     void Update()
     {
-        if (zombiesInSight.Length > zombieCountThreshold || reacting)
+        if (zombiesInSight.Length >= zombieCountThreshold || reacting)
         {
             if (!reacting) StartCoroutine(ReactionResetTimer(5f));
             reacting = true;
