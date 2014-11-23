@@ -9,6 +9,7 @@ public class WalkScript : MonoBehaviour
     public float turnSpeed = 15f;
     private GameObject target = null;
     private bool seeking = false;
+    private bool stunned = false;
 
     void Start()
     {
@@ -33,6 +34,12 @@ public class WalkScript : MonoBehaviour
             seeking = true;
             StartCoroutine(Seeking());
         }
+    }
+
+    public void Stun()
+    {
+        stunned = true;
+        StartCoroutine(Unstun());
     }
 
     public void Walk(float speed)
@@ -60,7 +67,7 @@ public class WalkScript : MonoBehaviour
         {
             Vector2 force1 = transform.right * moveAccel * (speed - Vector2.Dot(transform.right, rigidbody2D.velocity) / maxSpeed);
             Vector2 force2 = transform.up * moveAccel * (0 - Vector2.Dot(transform.up, rigidbody2D.velocity) / maxSpeed);
-            rigidbody2D.AddForce(force1 + force2);
+            if(!stunned)rigidbody2D.AddForce(force1 + force2);
 
             speed = 0;
 
@@ -80,5 +87,11 @@ public class WalkScript : MonoBehaviour
 
             if (this.target == null) seeking = false;
         }
+    }
+
+    IEnumerator Unstun()
+    {
+        yield return new WaitForSeconds(1f);
+        stunned = false;
     }
 }

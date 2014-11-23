@@ -19,7 +19,7 @@ public abstract class CharacterScript : MonoBehaviour
 
     protected Animator anim;
 
-    void Start()
+    protected virtual void Start()
     {
         anim = GetComponent<Animator>();
     }
@@ -70,7 +70,7 @@ public abstract class CharacterScript : MonoBehaviour
     protected virtual void Die()
     {
         walkScript.StopSeeking();
-        rigidbody2D.isKinematic = true;
+        //rigidbody2D.isKinematic = true;
         this.gameObject.layer = 0;
         this.renderer.sortingOrder = this.renderer.sortingOrder - 1;
         this.collider2D.enabled = false;

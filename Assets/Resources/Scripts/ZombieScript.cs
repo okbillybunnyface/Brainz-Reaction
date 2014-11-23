@@ -7,8 +7,9 @@ public class ZombieScript : CharacterScript
 	public GameObject selectionCircle;
 
 	// Use this for initialization
-	void Start () 
+	protected override void Start () 
     {
+        base.Start();
         walkScript = this.GetComponent<WalkScript>();
         target = this.gameObject;
         StartCoroutine(FindVictim(1f));
@@ -16,12 +17,17 @@ public class ZombieScript : CharacterScript
 
     void Update()
     {
-		if (hitPoints <= 0) Die();
+		
         
         if (target == null && !ded)
         {
             walkScript.StopSeeking();
             StartCoroutine(FindVictim(1f));
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Die();
         }
     }
 
@@ -61,7 +67,7 @@ public class ZombieScript : CharacterScript
     protected override void Die()
     {
         //this.gameObject.SetActive(false);
-
+        rigidbody2D.isKinematic = true;
         base.Die();
         
 		anim.SetTrigger("death");
