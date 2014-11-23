@@ -39,6 +39,8 @@ public abstract class HumanScript : CharacterScript
 
     protected override void Die()
     {
+        base.Die();
+
         if (infected)
         {
             GameObject zombie = (GameObject)GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Zombie"));

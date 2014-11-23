@@ -5,8 +5,6 @@ using UnityEngine;
 
 static class PoissonDisc
 {
-    private static System.Random random = new System.Random();
-
     //There must be at least one numPoints, and nothing may be negative
     public static Vector2[] Bridsons(Vector2 origin, float minDistance, int numPoints, int maxTries)
     {
@@ -55,8 +53,8 @@ static class PoissonDisc
 
     private static Vector2 GenerateVector(Vector2 origin, float minDistance)
     {
-        float angle = (float)(random.NextDouble() * 2 * Math.PI);
-        float distance = (float)((random.NextDouble() * minDistance) + minDistance);
+        float angle = (float)(EnvironmentScript.random.NextDouble() * 2 * Math.PI);
+        float distance = (float)((EnvironmentScript.random.NextDouble() * minDistance) + minDistance);
 
         Vector2 output = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         output *= distance;

@@ -13,9 +13,12 @@ public class GunmanScript : HumanScript
 
     protected override void ReactToZombies()
     {
-        walkScript.TurnTo(closestZombie);
+        if (closestZombie != null)
+        {
+            walkScript.TurnTo(closestZombie);
 
-        if(canAttack) Attack(closestZombie);
+            if (canAttack) Attack(closestZombie);
+        }
     }
 
     protected override void Attack(GameObject victim)

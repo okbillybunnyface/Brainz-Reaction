@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class EnvironmentScript : MonoBehaviour {
@@ -7,6 +8,7 @@ public class EnvironmentScript : MonoBehaviour {
 	public float pauseTime = 5f;
 	public static GameObject currentZombie, currentTarget;
 	private static bool zombieSelectedFirst = false;
+    public static System.Random random = new System.Random();
 
 
 	// Use this for initialization
